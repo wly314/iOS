@@ -1,0 +1,99 @@
+http://blog.csdn.net/lixuwen521/article/details/7652233
+
+UIGestureRecognizer是一个抽象类，定义了所有手势的基本行为，它有6个子类处理具体的手势：
+
+1.UITapGestureRecognizer （任意手指任意次数的点击）
+
+// 点击次数
+
+numberOfTapsRequired
+
+// 手指个数
+
+numberOfTouchesRequired   
+
+
+
+[plain] view plaincopy
+UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] init];  
+[tapGestureRecognizer addTarget:self action:@selector(gestureRecognizerHandle:)];  
+[tapGestureRecognizer setNumberOfTapsRequired:2];  
+[tapGestureRecognizer setNumberOfTouchesRequired:2];  
+[self.view addGestureRecognizer:tapGestureRecognizer];  
+[tapGestureRecognizer release];  
+
+2.UIPinchGestureRecognizer （两个手指捏合动作）
+
+
+// 手指捏合，大于1表示两个手指之间的距离变大，小于1表示两个手指之间的距离变小
+scale
+// 手指捏合动作时的速率（加速度）
+velocity
+
+[plain] view plaincopy
+UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] init];  
+[pinchGestureRecognizer addTarget:self action:@selector(gestureRecognizerHandle:)];  
+[self.view addGestureRecognizer:pinchGestureRecognizer];  
+[pinchGestureRecognizer release];  
+
+3.UIPanGestureRecognizer (摇动或者拖拽)
+
+// 最少手指个数
+minimumNumberOfTouches
+// 最多手指个数
+maximumNumberOfTouches
+
+[plain] view plaincopy
+UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] init];  
+[panGestureRecognizer addTarget:self action:@selector(gestureRecognizerHandle:)];  
+[panGestureRecognizer setMinimumNumberOfTouches:1];  
+[panGestureRecognizer setMaximumNumberOfTouches:5];  
+[self.view addGestureRecognizer:panGestureRecognizer];  
+[panGestureRecognizer release];  
+
+4.UISwipeGestureRecognizer (手指在屏幕上滑动操作手势)
+
+// 滑动手指的个数
+numberOfTouchesRequired
+// 手指滑动的方向 （Up,Down,Left,Right）
+direction
+
+[plain] view plaincopy
+UISwipeGestureRecognizer *swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] init];  
+[swipeGestureRecognizer addTarget:self action:@selector(gestureRecognizerHandle:)];  
+[swipeGestureRecognizer setNumberOfTouchesRequired:2];  
+[swipeGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];  
+[self.view addGestureRecognizer:swipeGestureRecognizer];  
+[swipeGestureRecognizer release];  
+
+5.UIRotationGestureRecognizer (手指在屏幕上旋转操作)
+
+// 旋转方向，小于0为逆时针旋转手势，大于0为顺时针手势
+rotation
+// 旋转速率
+velocity
+
+[plain] view plaincopy
+UIRotationGestureRecognizer *rotationGestureRecognizer = [[UIRotationGestureRecognizer alloc] init];  
+[rotationGestureRecognizer addTarget:self action:@selector(gestureRecognizerHandle:)];  
+[self.view addGestureRecognizer:rotationGestureRecognizer];  
+[rotationGestureRecognizer release];  
+
+6.UILongPressGestureRecognizer (长按手势)
+
+// Default is 0. The number of full taps required before the press for gesture to be recognized
+numberOfTapsRequired
+// 需要长按的手指的个数
+numberOfTouchesRequired
+// 需要长按的时间，最小为0.5s
+minimumPressDuration
+// 手指按住允许移动的距离
+allowableMovement
+
+[plain] view plaincopy
+UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] init];  
+[longPressGestureRecognizer addTarget:self action:@selector(gestureRecognizerHandle:)];  
+[longPressGestureRecognizer setMinimumPressDuration:1.0f];  
+[longPressGestureRecognizer setAllowableMovement:50.0];  
+[self.view addGestureRecognizer:longPressGestureRecognizer];  
+[longPressGestureRecognizer release];  
