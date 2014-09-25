@@ -1,0 +1,18 @@
+（都是自己遇到的，看看最终遇到多少，从今天计算，不断更新…）
+主要原因分为两个方面：
+
+Metadata Rejected
+
+一：是元数据的问题（解释说明性的内容不妥）这种情况不需要再次提交二进制数据（Archives数据），直接在itunuesConnect里的App Detail中点击相应的界面Edit，修改后提交就可以了。
+
+
+Binary Rejected
+
+二：是二进制数据的问题，这种情况需要修改代码，再次用发布证书生成一个Archives，验证+发布。
+
+审核指南
+
+2014－09-23
+
+17.5
+Apps that include account registration or access a user’s existing account must include a privacy policy or they will be rejected
