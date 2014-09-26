@@ -1,0 +1,4 @@
+NSString* imagePath = [[NSBundle mainBundle] pathForResource:@"dog" ofType:@"png"];
+    UIImage* myImageObj = [[UIImage alloc] initWithContentsOfFile:imagePath];
+    //[myImageObj drawAtPoint:CGPointMake(0, 0)];
+    [myImageObj drawInRect:CGRectMake(0, 0, 320, 480)];
