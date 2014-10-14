@@ -1,0 +1,69 @@
+-(NSMutableArray *)getScheduleData:(NSString *)table Time:(double)intervalTime
+{
+    //获取当前时间
+    NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"Asia/Urumqi"]];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSString *currentTime = [DateFormate GetCurrentTime:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *date1 = [dateFormatter dateFromString:currentTime];
+    NSMutableArray *tempContents = [m_dbSingleton selectFromTable:table];
+    NSArray *tempArr = nil;
+    
+    //    数据库中没有存储信息
+    if(nil == tempContents || [tempContents count] <= 0)
+    {
+        tempArr = [serviceHelper getScheduleListOfWeekType:1];
+        
+        for (int i = 0; i<[tempArr count]; i++)
+        {
+            NSString *str = [[JSONAutoSerializer sharedSerializer]serializeObject:[tempArr objectAtIndex:i]];
+            [m_dbSingleton insertContentTable:table Content:str Time:currentTime];
+        }
+    }
+    else
+    {
+        //获取存储时间
+        NSDictionary *dic = [tempContents objectAtIndex:0];
+        NSDate *date2= [dateFormatter dateFromString:[dic objectForKey:@"time"]];
+        //两次存储的时间间隔
+        NSTimeInterval time = [date1 timeIntervalSinceDate:date2];
+        //超过时间
+        NSCalendar*calendar = [NSCalendar currentCalendar];
+        
+        NSDateComponents *comps1 = [calendar components:(NSWeekCalendarUnit | NSWeekdayCalendarUnit |NSWeekdayOrdinalCalendarUnit) fromDate:date1];
+        NSInteger week1 = [comps1 week]; //当前时间是今年的第几周
+        
+        NSDateComponents *comps2 = [calendar components:(NSWeekCalendarUnit | NSWeekdayCalendarUnit |NSWeekdayOrdinalCalendarUnit) fromDate:date2];
+        NSInteger week2 = [comps2 week]; //上次时间是今年的第几周
+        
+        //超过时间
+        if(week1 != week2 || time > intervalTime)
+        {
+            tempArr = [serviceHelper getScheduleListOfWeekType:1];
+            
+            if (tempArr && tempArr.count > 0) {
+                
+                //先清除原表中信息
+                [m_dbSingleton deleteTable:table];
+                
+                for (int i = 0; i<[tempArr count]; i++)
+                {
+                    NSString *str = [[JSONAutoSerializer sharedSerializer]serializeObject:[tempArr objectAtIndex:i]];
+                    DLog(@"%@",str);
+                    [m_dbSingleton insertContentTable:table Content:str Time:currentTime];
+                }
+            }
+            
+        }
+    }
+    //    从表中查询数据返回
+    NSMutableArray *temp = [m_dbSingleton selectFromTable:table];
+    NSMutableArray *returnArr = [[NSMutableArray alloc] init];
+    for (int i = 0; i<[temp count]; i++)
+    {
+        NSDictionary *dic = [temp objectAtIndex:i];
+        [returnArr addObject:[dic objectForKey:@"content"]];
+    }
+    return returnArr ;
+}
